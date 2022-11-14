@@ -3,6 +3,7 @@ package com.example.springjpatest.util;
 import org.jetbrains.annotations.NotNull;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.springframework.data.domain.Page;
 
 import java.util.Collection;
 import java.util.List;
@@ -61,6 +62,21 @@ public class MapperUtils {
         return source.stream()
                 .map(element -> modelMapper.map(element, targetClass))
                 .collect(Collectors.toSet());
+    }
+
+    /**
+     * Maps the Page {@code entities} of <code>T</code> type which have to be mapped as input to {@code dtoClass} Page
+     * of mapped object with <code>D</code> type.
+     *
+     * @param <T>      - target type of objects in result page
+     * @param <S>      - source type of entity in <code>entityPage</code>
+     * @param entities - page of entities that needs to be mapped
+     * @param dtoClass - class of result page element
+     * @return page - mapped page with objects of type <code>D</code>.
+     * <code>dtoClass</code> must has NoArgsConstructor!
+     */
+    public static <S, T> @NotNull Page<T> mapEntityPageIntoDtoPage(@NotNull Page<S> entities, Class<T> dtoClass) {
+        return entities.map(objectEntity -> modelMapper.map(objectEntity, dtoClass));
     }
 
     /**

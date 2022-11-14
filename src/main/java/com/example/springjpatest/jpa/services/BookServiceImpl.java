@@ -5,9 +5,14 @@ import com.example.springjpatest.jpa.entity.BookEntity;
 import com.example.springjpatest.jpa.repository.BookEntityRepository;
 import com.example.springjpatest.util.MapperUtils;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -64,6 +69,16 @@ public class BookServiceImpl implements BookService {
     public List<BookEntityDto> list() {
         List<BookEntity> list = bookEntityRepository.findAll();
         return MapperUtils.mapAll(list, BookEntityDto.class);
+    }
+
+    public Page<BookEntityDto> list(@Nullable Pageable pageable) {
+        if (pageable == null) {
+            pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "id"));
+        }
+
+        Page<BookEntity> entities = bookEntityRepository.findByOrderByIdAsc(pageable);
+
+        return MapperUtils.mapEntityPageIntoDtoPage(entities, BookEntityDto.class);
     }
 
     @Transactional

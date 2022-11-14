@@ -4,9 +4,17 @@ import com.example.springjpatest.jpa.dto.AuthorEntityDto;
 import com.example.springjpatest.jpa.entity.AuthorEntity;
 import com.example.springjpatest.jpa.repository.AuthorEntityRepository;
 import com.example.springjpatest.util.MapperUtils;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -73,5 +81,33 @@ public class AuthorServiceImpl implements AuthorService {
     public List<AuthorEntityDto> list() {
         List<AuthorEntity> authorEntities = authorEntityRepository.findAll();
         return MapperUtils.mapAll(authorEntities, AuthorEntityDto.class);
+    }
+
+    public Page<AuthorEntityDto> list(@Nullable Pageable pageable) {
+        if (pageable == null) {
+            pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "id"));
+        }
+
+        Page<AuthorEntity> entities = authorEntityRepository.findByOrderByIdAsc(pageable);
+
+        return MapperUtils.mapEntityPageIntoDtoPage(entities, AuthorEntityDto.class);
+    }
+
+    @Transactional
+    @Override
+    public AuthorEntityDto update(@NotNull AuthorEntityDto authorDto) {
+        Optional<AuthorEntity> authorEntityOptional = authorEntityRepository.findById(authorDto.getId());
+
+        if (authorEntityOptional.isPresent()) {
+            ModelMapper modelMapper = new ModelMapper();
+            TypeMap<AuthorEntityDto, AuthorEntity> propertyMapper = modelMapper.createTypeMap(authorDto, AuthorEntity.class);
+            propertyMapper.addMappings(mapper -> mapper.skip(AuthorEntity::setId));
+            propertyMapper.setProvider(p -> authorEntityOptional.get());
+            AuthorEntity author = modelMapper.map(authorDto, AuthorEntity.class);
+
+            return modelMapper.map(authorEntityRepository.save(author), AuthorEntityDto.class);
+        }
+
+        return null;
     }
 }
