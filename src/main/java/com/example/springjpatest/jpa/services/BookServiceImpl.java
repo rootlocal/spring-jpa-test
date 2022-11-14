@@ -3,14 +3,16 @@ package com.example.springjpatest.jpa.services;
 import com.example.springjpatest.jpa.dto.BookEntityDto;
 import com.example.springjpatest.jpa.entity.BookEntity;
 import com.example.springjpatest.jpa.repository.BookEntityRepository;
+import com.example.springjpatest.util.MapperUtils;
 import org.jetbrains.annotations.NotNull;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 public class BookServiceImpl implements BookService {
@@ -22,11 +24,12 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookEntity add(BookEntityDto bookEntityDto) {
+    public BookEntityDto add(BookEntityDto book) {
         ModelMapper mapper = new ModelMapper();
-        BookEntity bookEntity = mapper.map(bookEntityDto, BookEntity.class);
-        return bookEntityRepository.save(bookEntity);
+        BookEntity bookEntity = mapper.map(book, BookEntity.class);
+        return mapper.map(bookEntityRepository.save(bookEntity), BookEntityDto.class);
     }
+
 
     @Override
     public boolean isExits(String name) {
@@ -60,11 +63,24 @@ public class BookServiceImpl implements BookService {
     @Override
     public List<BookEntityDto> list() {
         List<BookEntity> list = bookEntityRepository.findAll();
-        return mapList(list, BookEntityDto.class);
+        return MapperUtils.mapAll(list, BookEntityDto.class);
     }
 
-    <S, T> List<T> mapList(@NotNull List<S> source, Class<T> targetClass) {
-        ModelMapper modelMapper = new ModelMapper();
-        return source.stream().map(element -> modelMapper.map(element, targetClass)).collect(Collectors.toList());
+    @Transactional
+    @Override
+    public BookEntityDto update(@NotNull BookEntityDto bookDto) {
+        Optional<BookEntity> bookEntityOptional = bookEntityRepository.findById(bookDto.getId());
+
+        if (bookEntityOptional.isPresent()) {
+            ModelMapper modelMapper = new ModelMapper();
+            TypeMap<BookEntityDto, BookEntity> propertyMapper = modelMapper.createTypeMap(bookDto, BookEntity.class);
+            propertyMapper.addMappings(mapper -> mapper.skip(BookEntity::setId));
+            propertyMapper.setProvider(p -> bookEntityOptional.get());
+            BookEntity book = modelMapper.map(bookDto, BookEntity.class);
+
+            return modelMapper.map(bookEntityRepository.save(book), BookEntityDto.class);
+        }
+
+        return null;
     }
 }

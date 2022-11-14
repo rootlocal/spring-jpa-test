@@ -5,6 +5,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.persistence.*;
+import java.util.*;
 
 @Getter
 @Setter
@@ -26,6 +27,15 @@ public class BookEntity {
     @Version
     @Column
     private Long version;
+
+    @ToString.Exclude
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "t_book_author",
+            joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"),
+            foreignKey = @ForeignKey(name = "fk_book_author_key")
+    )
+    private Set<AuthorEntity> authors = new HashSet<>();
 
     public BookEntity() {
     }

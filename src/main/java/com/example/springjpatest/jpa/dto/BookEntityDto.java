@@ -1,6 +1,7 @@
 package com.example.springjpatest.jpa.dto;
 
 import com.example.springjpatest.jpa.entity.BookTypeEnum;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.Getter;
@@ -8,6 +9,8 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A DTO for the {@link com.example.springjpatest.jpa.entity.BookEntity} entity
@@ -19,12 +22,19 @@ import java.io.Serializable;
 public class BookEntityDto implements Serializable {
 
     private static final long serialVersionUID = 2406245506155274552L;
-    @JsonProperty("book-id")
+    @JsonProperty("id")
     private Long id;
-    @JsonProperty("book-name")
+    @JsonProperty("name")
     private String name;
-    @JsonProperty("book-type")
+
+    @JsonIgnore
     private BookTypeEnum type;
+
+    @JsonProperty("type")
+    private String BookType;
+
+    @JsonProperty("authors")
+    private List<AuthorEntityDto> authors = new ArrayList<>();
 
     public BookEntityDto() {
     }
@@ -40,4 +50,13 @@ public class BookEntityDto implements Serializable {
         this.type = type;
     }
 
+    public BookEntityDto(String name, BookTypeEnum type, List<AuthorEntityDto> authors) {
+        this.name = name;
+        this.type = type;
+        this.authors = authors;
+    }
+
+    public String getBookType() {
+        return type.getType();
+    }
 }

@@ -19,6 +19,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -54,6 +55,7 @@ public class ExceptionHandlingController implements WebMvcConfigurer {
         String message = e.getMessage();
         StringBuffer url = httpServletRequest.getRequestURL();
         //StackTraceElement[] trace = e.getStackTrace();
+        log.error(e.toString());
         ModelAndView modelAndView = new ModelAndView("error");
         //Cookie[] cookies = httpServletRequest.getCookies();
 

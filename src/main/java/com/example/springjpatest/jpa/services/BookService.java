@@ -1,13 +1,12 @@
 package com.example.springjpatest.jpa.services;
 
 import com.example.springjpatest.jpa.dto.BookEntityDto;
-import com.example.springjpatest.jpa.entity.BookEntity;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface BookService {
-    BookEntity add(BookEntityDto bookEntityDto);
+    BookEntityDto add(BookEntityDto book);
 
     boolean isExits(String name);
 
@@ -18,4 +17,6 @@ public interface BookService {
     void delete(Long id);
 
     List<BookEntityDto> list();
+
+    BookEntityDto update(BookEntityDto book);
 }
