@@ -1,5 +1,6 @@
 package com.example.springjpatest.jpa.services;
 
+import com.example.springjpatest.events.NewBookEvent;
 import com.example.springjpatest.jpa.dto.BookEntityDto;
 import com.example.springjpatest.jpa.entity.BookEntity;
 import com.example.springjpatest.jpa.repository.BookEntityRepository;
@@ -9,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -22,10 +24,12 @@ import java.util.Optional;
 @Service
 public class BookServiceImpl implements BookService {
     private final BookEntityRepository bookEntityRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Autowired
-    public BookServiceImpl(BookEntityRepository bookEntityRepository) {
+    public BookServiceImpl(BookEntityRepository bookEntityRepository, ApplicationEventPublisher applicationEventPublisher) {
         this.bookEntityRepository = bookEntityRepository;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Override
@@ -33,8 +37,10 @@ public class BookServiceImpl implements BookService {
         ModelMapper mapper = new ModelMapper();
         BookEntity bookEntity = mapper.map(book, BookEntity.class);
         BookEntity newBook = bookEntityRepository.save(bookEntity);
+        BookEntityDto bookDto = mapper.map(newBook, BookEntityDto.class);
+        applicationEventPublisher.publishEvent(new NewBookEvent(bookDto));
 
-        return mapper.map(newBook, BookEntityDto.class);
+        return bookDto;
     }
 
 

@@ -1,5 +1,6 @@
 package com.example.springjpatest.jpa.services;
 
+import com.example.springjpatest.events.NewAuthorEvent;
 import com.example.springjpatest.jpa.dto.AuthorEntityDto;
 import com.example.springjpatest.jpa.entity.AuthorEntity;
 import com.example.springjpatest.jpa.repository.AuthorEntityRepository;
@@ -9,6 +10,7 @@ import org.jetbrains.annotations.Nullable;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeMap;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -23,10 +25,12 @@ import java.util.Optional;
 public class AuthorServiceImpl implements AuthorService {
 
     private final AuthorEntityRepository authorEntityRepository;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Autowired
-    public AuthorServiceImpl(AuthorEntityRepository authorEntityRepository) {
+    public AuthorServiceImpl(AuthorEntityRepository authorEntityRepository, ApplicationEventPublisher applicationEventPublisher) {
         this.authorEntityRepository = authorEntityRepository;
+        this.applicationEventPublisher = applicationEventPublisher;
     }
 
     @Override
@@ -34,8 +38,9 @@ public class AuthorServiceImpl implements AuthorService {
         ModelMapper mapper = new ModelMapper();
         AuthorEntity authorEntity = mapper.map(author, AuthorEntity.class);
         AuthorEntity newAuthor = authorEntityRepository.save(authorEntity);
-
-        return mapper.map(newAuthor, AuthorEntityDto.class);
+        AuthorEntityDto authorDto = mapper.map(newAuthor, AuthorEntityDto.class);
+        applicationEventPublisher.publishEvent(new NewAuthorEvent(authorDto));
+        return authorDto;
     }
 
     @Override

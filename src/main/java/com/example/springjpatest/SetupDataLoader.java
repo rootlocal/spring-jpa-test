@@ -96,10 +96,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
     private void addBook(@NotNull BookEntityDto book, Set<AuthorEntityDto> authors) {
         if (!bookService.isExits(book.getName())) {
-            log.warn("add book {}", book);
             BookEntityDto bookEntityDto = bookService.add(book);
-
-            log.warn("set book authors {}", authors);
             bookEntityDto.setAuthors(authors);
             bookService.update(bookEntityDto);
         }
@@ -107,7 +104,6 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
     private void addAuthor(@NotNull AuthorEntityDto author) {
         if (!authorService.isExits(author.getName())) {
-            log.warn("add author {}", author);
             authorService.add(author);
         }
     }
