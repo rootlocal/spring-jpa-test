@@ -1,0 +1,70 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '2.7.5'
+    id 'io.spring.dependency-management' version '1.0.15.RELEASE'
+    id "com.bmuschko.cargo" version "2.9.0"
+    id 'war'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    maven { url 'https://repo.spring.io/milestone' }
+    maven { url 'https://repo.spring.io/snapshot' }
+}
+
+ext {
+    cargo_hostname = project.hasProperty('CARGO_HOSTNAME') ? project.property('CARGO_HOSTNAME') : System.getenv('CARGO_HOSTNAME')
+    cargo_port = project.hasProperty('CARGO_PORT') ? project.property('CARGO_PORT') : System.getenv('CARGO_PORT')
+    cargo_username = project.hasProperty('CARGO_USER') ? project.property('CARGO_USER') : System.getenv('CARGO_USER')
+    cargo_password = project.hasProperty('CARGO_PASSWORD') ? project.property('CARGO_PASSWORD') : System.getenv('CARGO_PASSWORD')
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-web-services'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
+
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    runtimeOnly 'com.h2database:h2'
+    implementation 'org.jetbrains:annotations:23.0.0'
+    implementation group: 'org.modelmapper', name: 'modelmapper', version: '3.1.0'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+
+// deploy
+cargo {
+    containerId = 'tomcat9x'
+    port = "${cargo_port}".isBlank() ? 0 : "${cargo_port}" as Integer
+
+    deployable {
+        context = 'jpa-test'
+    }
+
+    remote {
+        hostname = "${cargo_hostname}"
+        port = "${cargo_port}".isBlank() ? 0 : "${cargo_port}" as Integer
+        username = "${cargo_username}"
+        password = "${cargo_password}"
+    }
+}

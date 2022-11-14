@@ -1,0 +1,46 @@
+#server:
+#  port: 8080
+#  address: 127.0.0.1
+
+spring:
+  mvc:
+    format:
+      date: yyyy-MM-dd
+      date-time: yyyy-MM-dd HH:mm:ss
+      #date-time: iso
+      time: HH:mm:ss
+
+  datasource:
+    #url: jdbc:h2:mem:mydb
+    url: jdbc:h2:file:/tmp/spring_jpa_test_db
+    username: sa
+    password: password
+    driverClassName: org.h2.Driver
+  jpa:
+    generate-ddl: true
+    properties:
+      hibernate:
+        enable_lazy_load_no_trans: true
+        dialect: org.hibernate.dialect.H2Dialect
+
+  main:
+    allow-bean-definition-overriding: true
+    log-startup-info: false
+    output:
+      ansi:
+        enabled: ALWAYS
+
+logging:
+  file:
+    name: log/app.log
+  level:
+    # FATAL ERROR WARN INFO DEBUG TRACE
+    org.springframework: ERROR
+    org.springframework.web: ERROR
+    tomcat: ERROR
+    web: ERROR
+    sql: ERROR
+  group:
+    tomcat: org.apache.catalina, org.apache.coyote, org.apache.tomcat
+    web: org.springframework.core.codec, org.springframework.http, org.springframework.web, org.springframework.boot.actuate.endpoint.web, org.springframework.boot.web.servlet.ServletContextInitializerBeans
+    sql: org.springframework.jdbc.core, org.hibernate.SQL
