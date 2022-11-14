@@ -28,6 +28,7 @@ ext {
     cargo_port = project.hasProperty('CARGO_PORT') ? project.property('CARGO_PORT') : System.getenv('CARGO_PORT')
     cargo_username = project.hasProperty('CARGO_USER') ? project.property('CARGO_USER') : System.getenv('CARGO_USER')
     cargo_password = project.hasProperty('CARGO_PASSWORD') ? project.property('CARGO_PASSWORD') : System.getenv('CARGO_PASSWORD')
+    cargo_context = project.hasProperty('CARGO_CONTEXT') ? project.property('CARGO_CONTEXT') : System.getenv('CARGO_CONTEXT')
 }
 
 dependencies {
@@ -58,7 +59,7 @@ cargo {
     port = "${cargo_port}".isBlank() ? 0 : "${cargo_port}" as Integer
 
     deployable {
-        context = 'jpa-test'
+        context = "${cargo_context}"
     }
 
     remote {
