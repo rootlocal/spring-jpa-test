@@ -1,14 +1,23 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <title>HOME</title>
+<head th:replace="~{layout/main :: head(~{::title},~{})}">
+    <title>Home Page</title>
 </head>
 <body>
+<th:block th:replace="~{layout/navbar :: navbar('index')}"></th:block>
 
-<h1>HOME</h1>
+<div class="container">
+    <div class="page">
+        <h1>Home page</h1>
 
+        <h3>Books:</h3>
+        <ul>
+            <li><a th:href="@{book}">get all books</a></li>
+            <li><a th:href="@{book/1}">get book id 1</a></li>
+        </ul>
+    </div>
+</div>
+
+<div th:insert="~{layout/main :: footer}">...</div>
 </body>
 </html>

@@ -1,13 +1,16 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+<head th:replace="~{layout/main :: head(~{::title},~{})}">
     <title>404</title>
 </head>
 <body>
-<h1>404</h1>
-
+<th:block th:replace="~{layout/navbar :: navbar('index')}"></th:block>
+<div class="container">
+    <div class="page">
+        <h1>Page not found</h1>
+        <p><a href="/" th:href="@{/}">Back to Home Page</a></p>
+    </div>
+</div>
+<div th:insert="~{layout/main :: footer}">...</div>
 </body>
 </html>

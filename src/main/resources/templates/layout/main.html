@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head th:fragment="head(title, links)">
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <title th:replace="${title}">Spring Boot Thymeleaf Application</title>
+    <link th:href="@{/webjars/font-awesome/css/all.min.css} " th:rel="stylesheet"/>
+    <link th:href="@{/webjars/bootstrap/css/bootstrap.min.css} " th:rel="stylesheet"/>
+    <link th:href="@{/assets/css/site.css}" th:rel="stylesheet"/>
+    <th:block th:replace="${links}"/>
+</head>
+<body>
+<th:block th:replace="~{navbar :: navbar('main')}"></th:block>
+
+<th:block th:fragment="content">
+    <div class="container">
+        <div class="page">
+
+        </div>
+    </div>
+</th:block>
+
+
+<th:block th:fragment="footer">
+
+    <div class="footer">
+        <div class="container-fluid">
+            <div class="col-12">
+                <span class="float-left">
+                    <th:block
+                            th:text="${'© ' + T(org.thymeleaf.util.DateUtils).format(#dates.createNow(),'yyyy', #locale)} + ' (copyright)'"/>
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <script th:src="@{/webjars/jquery/dist/jquery.min.js}"></script>
+    <script th:src="@{/webjars/popper/umd/popper.min.js}"></script>
+    <script th:src="@{/webjars/font-awesome/js/all.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+    <script crossorigin="anonymous" src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
+    <script th:src="@{/assets/js/site.js}"></script>
+</th:block>
+</body>
+</html>

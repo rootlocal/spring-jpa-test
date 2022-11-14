@@ -1,6 +1,7 @@
 package com.example.springjpatest.web.controllers;
 
 import com.example.springjpatest.web.exception.HttpException;
+import com.example.springjpatest.web.exception.NotFoundException;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,6 +72,10 @@ public class ExceptionHandlingController implements WebMvcConfigurer {
             log.error("httpStatus: {}, url: {}, message: {}", httpStatus, url, message);
         } else {
             log.error("url: {}, message: {}", url, message);
+        }
+
+        if (e instanceof NotFoundException) {
+            modelAndView.setViewName("404");
         }
 
         return modelAndView;
