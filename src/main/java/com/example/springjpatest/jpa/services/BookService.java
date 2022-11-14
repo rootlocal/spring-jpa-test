@@ -17,6 +17,8 @@ public interface BookService {
 
     Optional<BookEntityDto> view(Long id);
 
+    Optional<BookEntityDto> view(String name);
+
     void delete(Long id);
 
     List<BookEntityDto> list();

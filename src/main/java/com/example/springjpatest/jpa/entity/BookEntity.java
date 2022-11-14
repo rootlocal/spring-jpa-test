@@ -3,6 +3,7 @@ package com.example.springjpatest.jpa.entity;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.util.*;
@@ -35,10 +36,22 @@ public class BookEntity {
             inverseJoinColumns = @JoinColumn(name = "author_id", referencedColumnName = "id"),
             foreignKey = @ForeignKey(name = "fk_book_author_key")
     )
-    private Set<AuthorEntity> authors = new HashSet<>();
+    private Collection<AuthorEntity> authors = new ArrayList<>();
 
     public BookEntity() {
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        BookEntity book = (BookEntity) o;
+        return id != null && Objects.equals(id, book.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
+    }
 
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import java.util.*;
@@ -26,9 +27,22 @@ public class AuthorEntity {
     @JsonIgnore
     @ToString.Exclude
     @ManyToMany(mappedBy = "authors")
-    private Set<BookEntity> books = new HashSet<>();
+    private Collection<BookEntity> books = new ArrayList<>();
 
     public AuthorEntity() {
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
+        AuthorEntity author = (AuthorEntity) o;
+        return id != null && Objects.equals(id, author.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass().hashCode();
     }
 }
 

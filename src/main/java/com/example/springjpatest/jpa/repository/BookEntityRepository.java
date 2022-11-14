@@ -7,10 +7,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public interface BookEntityRepository extends JpaRepository<BookEntity, Long>, JpaSpecificationExecutor<BookEntity> {
 
     boolean existsByName(String name);
 
     Page<BookEntity> findByOrderByIdAsc(Pageable pageable);
+
+    Optional<BookEntity> findByName(String name);
 }

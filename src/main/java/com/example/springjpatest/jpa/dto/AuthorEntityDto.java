@@ -8,8 +8,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * A DTO for the {@link com.example.springjpatest.jpa.entity.AuthorEntity} entity
@@ -24,7 +23,7 @@ public class AuthorEntityDto implements Serializable {
     @JsonProperty("firstName")
     private String name;
     @JsonIgnore
-    private List<BookEntityDto> books = new ArrayList<>();
+    private Collection<BookEntityDto> books = new ArrayList<>();
 
     public AuthorEntityDto() {
     }

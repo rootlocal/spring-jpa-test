@@ -33,8 +33,9 @@ public class AuthorServiceImpl implements AuthorService {
     public AuthorEntityDto add(AuthorEntityDto author) {
         ModelMapper mapper = new ModelMapper();
         AuthorEntity authorEntity = mapper.map(author, AuthorEntity.class);
+        AuthorEntity newAuthor = authorEntityRepository.save(authorEntity);
 
-        return mapper.map(authorEntityRepository.save(authorEntity), AuthorEntityDto.class);
+        return mapper.map(newAuthor, AuthorEntityDto.class);
     }
 
     @Override
@@ -49,26 +50,22 @@ public class AuthorServiceImpl implements AuthorService {
 
     @Override
     public Optional<AuthorEntityDto> view(Long id) {
-        Optional<AuthorEntity> authorEntity = authorEntityRepository.findById(id);
-
-        if (authorEntity.isPresent()) {
-            ModelMapper mapper = new ModelMapper();
-            return Optional.of(mapper.map(authorEntity.get(), AuthorEntityDto.class));
-        }
-
-        return Optional.empty();
+        return authorEntityRepository.findById(id).map(entity -> {
+            ModelMapper modelMapper = new ModelMapper();
+            TypeMap<AuthorEntity, AuthorEntityDto> propertyMapper = modelMapper.createTypeMap(entity, AuthorEntityDto.class);
+            propertyMapper.addMappings(mapper -> mapper.skip(AuthorEntityDto::setBooks));
+            return modelMapper.map(entity, AuthorEntityDto.class);
+        });
     }
 
     @Override
     public Optional<AuthorEntityDto> view(String name) {
-        Optional<AuthorEntity> authorEntity = authorEntityRepository.findByName(name);
-
-        if (authorEntity.isPresent()) {
-            ModelMapper mapper = new ModelMapper();
-            return Optional.of(mapper.map(authorEntity.get(), AuthorEntityDto.class));
-        }
-
-        return Optional.empty();
+        return authorEntityRepository.findByName(name).map(entity -> {
+            ModelMapper modelMapper = new ModelMapper();
+            TypeMap<AuthorEntity, AuthorEntityDto> propertyMapper = modelMapper.createTypeMap(entity, AuthorEntityDto.class);
+            propertyMapper.addMappings(mapper -> mapper.skip(AuthorEntityDto::setBooks));
+            return modelMapper.map(entity, AuthorEntityDto.class);
+        });
     }
 
     @Override
@@ -80,6 +77,7 @@ public class AuthorServiceImpl implements AuthorService {
     @Override
     public List<AuthorEntityDto> list() {
         List<AuthorEntity> authorEntities = authorEntityRepository.findAll();
+
         return MapperUtils.mapAll(authorEntities, AuthorEntityDto.class);
     }
 

@@ -36,7 +36,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             return;
         }
 
-        log.warn("Added Data");
+        log.warn("Updated Data");
 
         List<AuthorEntityDto> authors = new ArrayList<>();
         authors.add(new AuthorEntityDto("author1"));
@@ -56,7 +56,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
             addAuthor(author);
         }
 
-        List<AuthorEntityDto> authorsList1 = new ArrayList<>();
+        Set<AuthorEntityDto> authorsList1 = new HashSet<>();
         Optional<AuthorEntityDto> author1 = authorService.view("author1");
         author1.ifPresent(authorsList1::add);
         Optional<AuthorEntityDto> author2 = authorService.view("author2");
@@ -64,10 +64,10 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         Optional<AuthorEntityDto> author3 = authorService.view("author3");
         author3.ifPresent(authorsList1::add);
 
-        List<AuthorEntityDto> authorsList2 = new ArrayList<>();
+        Set<AuthorEntityDto> authorsList2 = new HashSet<>();
         Optional<AuthorEntityDto> author4 = authorService.view("author4");
         author4.ifPresent(authorsList2::add);
-        Optional<AuthorEntityDto> author5 = authorService.view("author4");
+        Optional<AuthorEntityDto> author5 = authorService.view("author5");
         author5.ifPresent(authorsList2::add);
 
         BookEntityDto book1 = new BookEntityDto("test1", BOOK_TYPE_FANTASY);
@@ -90,13 +90,16 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
         addBook(book8, authorsList2);
         addBook(book9, authorsList1);
 
+        log.warn("End Updated Data");
         alreadySetup = true;
     }
 
-    private void addBook(@NotNull BookEntityDto book, List<AuthorEntityDto> authors) {
+    private void addBook(@NotNull BookEntityDto book, Set<AuthorEntityDto> authors) {
         if (!bookService.isExits(book.getName())) {
+            log.warn("add book {}", book);
             BookEntityDto bookEntityDto = bookService.add(book);
 
+            log.warn("set book authors {}", authors);
             bookEntityDto.setAuthors(authors);
             bookService.update(bookEntityDto);
         }
@@ -104,6 +107,7 @@ public class SetupDataLoader implements ApplicationListener<ContextRefreshedEven
 
     private void addAuthor(@NotNull AuthorEntityDto author) {
         if (!authorService.isExits(author.getName())) {
+            log.warn("add author {}", author);
             authorService.add(author);
         }
     }

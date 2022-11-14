@@ -32,7 +32,9 @@ public class BookServiceImpl implements BookService {
     public BookEntityDto add(BookEntityDto book) {
         ModelMapper mapper = new ModelMapper();
         BookEntity bookEntity = mapper.map(book, BookEntity.class);
-        return mapper.map(bookEntityRepository.save(bookEntity), BookEntityDto.class);
+        BookEntity newBook = bookEntityRepository.save(bookEntity);
+
+        return mapper.map(newBook, BookEntityDto.class);
     }
 
 
@@ -49,14 +51,16 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public Optional<BookEntityDto> view(Long id) {
-        Optional<BookEntity> bookEntity = bookEntityRepository.findById(id);
+        return bookEntityRepository
+                .findById(id)
+                .map(bookEntity -> MapperUtils.map(bookEntity, BookEntityDto.class));
+    }
 
-        if (bookEntity.isPresent()) {
-            ModelMapper mapper = new ModelMapper();
-            return Optional.of(mapper.map(bookEntity.get(), BookEntityDto.class));
-        }
-
-        return Optional.empty();
+    @Override
+    public Optional<BookEntityDto> view(String name) {
+        return bookEntityRepository
+                .findByName(name)
+                .map(bookEntity -> MapperUtils.map(bookEntity, BookEntityDto.class));
     }
 
     @Override

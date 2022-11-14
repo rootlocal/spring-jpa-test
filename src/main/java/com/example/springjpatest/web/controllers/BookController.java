@@ -7,6 +7,8 @@ import com.example.springjpatest.web.exception.NotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -32,11 +34,11 @@ public class BookController {
     }
 
     @GetMapping("{id}")
-    public BookEntityDto view(@PathVariable String id) throws NotFoundException, BadRequestException {
+    public ResponseEntity<BookEntityDto> view(@PathVariable String id) throws NotFoundException, BadRequestException {
 
         try {
             Optional<BookEntityDto> optional = bookService.view(Long.decode(id));
-            return optional.orElseThrow(NotFoundException::new);
+            return new ResponseEntity<>(optional.orElseThrow(NotFoundException::new), HttpStatus.OK);
         } catch (NumberFormatException e) {
             log.error("NumberFormatException: {}" + e.getMessage());
             StringBuilder builder = new StringBuilder();

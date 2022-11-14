@@ -9,8 +9,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * A DTO for the {@link com.example.springjpatest.jpa.entity.BookEntity} entity
@@ -34,7 +33,7 @@ public class BookEntityDto implements Serializable {
     private String BookType;
 
     @JsonProperty("authors")
-    private List<AuthorEntityDto> authors = new ArrayList<>();
+    private Collection<AuthorEntityDto> authors = new ArrayList<>();
 
     public BookEntityDto() {
     }
@@ -48,12 +47,6 @@ public class BookEntityDto implements Serializable {
     public BookEntityDto(String name, BookTypeEnum type) {
         this.name = name;
         this.type = type;
-    }
-
-    public BookEntityDto(String name, BookTypeEnum type, List<AuthorEntityDto> authors) {
-        this.name = name;
-        this.type = type;
-        this.authors = authors;
     }
 
     public String getBookType() {
