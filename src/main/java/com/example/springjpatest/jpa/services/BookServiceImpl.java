@@ -71,6 +71,7 @@ public class BookServiceImpl implements BookService {
         return MapperUtils.mapAll(list, BookEntityDto.class);
     }
 
+    @Override
     public Page<BookEntityDto> list(@Nullable Pageable pageable) {
         if (pageable == null) {
             pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "id"));

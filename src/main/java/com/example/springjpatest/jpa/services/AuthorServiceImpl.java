@@ -83,6 +83,7 @@ public class AuthorServiceImpl implements AuthorService {
         return MapperUtils.mapAll(authorEntities, AuthorEntityDto.class);
     }
 
+    @Override
     public Page<AuthorEntityDto> list(@Nullable Pageable pageable) {
         if (pageable == null) {
             pageable = PageRequest.of(0, 10, Sort.by(Sort.Direction.ASC, "id"));

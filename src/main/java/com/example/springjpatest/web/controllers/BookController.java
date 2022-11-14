@@ -2,6 +2,10 @@ package com.example.springjpatest.web.controllers;
 
 import com.example.springjpatest.jpa.dto.BookEntityDto;
 import com.example.springjpatest.jpa.services.BookService;
+import com.example.springjpatest.web.exception.BadRequestException;
+import com.example.springjpatest.web.exception.NotFoundException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,6 +18,7 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/book")
 public class BookController {
+    private static final Logger log = LoggerFactory.getLogger(BookController.class);
     private final BookService bookService;
 
     @Autowired
@@ -27,8 +32,18 @@ public class BookController {
     }
 
     @GetMapping("{id}")
-    public BookEntityDto view(@PathVariable Long id) {
-        Optional<BookEntityDto> optional = bookService.view(id);
-        return optional.orElse(null);
+    public BookEntityDto view(@PathVariable String id) throws NotFoundException, BadRequestException {
+
+        try {
+            Optional<BookEntityDto> optional = bookService.view(Long.decode(id));
+            return optional.orElseThrow(NotFoundException::new);
+        } catch (NumberFormatException e) {
+            log.error("NumberFormatException: {}" + e.getMessage());
+            StringBuilder builder = new StringBuilder();
+            builder.append("NumberFormatException (Bad Request)\n");
+            builder.append(String.format("id: %s type not Long", id));
+            throw new BadRequestException(builder.toString());
+        }
+
     }
 }
