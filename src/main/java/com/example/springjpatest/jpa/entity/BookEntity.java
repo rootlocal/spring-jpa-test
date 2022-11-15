@@ -41,6 +41,11 @@ public class BookEntity {
     public BookEntity() {
     }
 
+    public BookEntity(String name, BookTypeEnum type) {
+        this.name = name;
+        this.type = type;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
