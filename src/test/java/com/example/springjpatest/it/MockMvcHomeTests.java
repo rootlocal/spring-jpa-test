@@ -1,5 +1,6 @@
-package com.example.springjpatest;
+package com.example.springjpatest.it;
 
+import com.example.springjpatest.SpringJpaTestApplication;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.autoconfigure.web.reactive.AutoConfigureWebTestClient;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;

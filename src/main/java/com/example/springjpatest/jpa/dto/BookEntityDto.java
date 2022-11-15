@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.*;
 
@@ -16,22 +17,30 @@ import java.util.*;
  */
 @Data
 @ToString
-@Getter
-@Setter
 public class BookEntityDto implements Serializable {
 
     private static final long serialVersionUID = 2406245506155274552L;
+    @Getter
+    @Setter
     @JsonProperty("id")
     private Long id;
+
+    @Getter
+    @Setter
+    @NotEmpty
     @JsonProperty("name")
     private String name;
 
+    @Getter
+    @Setter
     @JsonIgnore
     private BookTypeEnum type;
 
     @JsonProperty("type")
     private String BookType;
 
+    @Getter
+    @Setter
     @JsonProperty("authors")
     private Collection<AuthorEntityDto> authors = new ArrayList<>();
 
@@ -51,5 +60,10 @@ public class BookEntityDto implements Serializable {
 
     public String getBookType() {
         return type.getType();
+    }
+
+    public void setBookType(String type) {
+        this.BookType = type;
+        this.type = BookTypeEnum.fromString(type);
     }
 }

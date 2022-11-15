@@ -1,4 +1,4 @@
-package com.example.springjpatest;
+package com.example.springjpatest.repository;
 
 import com.example.springjpatest.jpa.entity.BookEntity;
 import com.example.springjpatest.jpa.entity.BookTypeEnum;

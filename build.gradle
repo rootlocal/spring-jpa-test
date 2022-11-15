@@ -42,6 +42,7 @@ dependencies {
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
     // Spring Boot Configuration Annotation Processor
     implementation 'org.springframework.boot:spring-boot-configuration-processor'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
