@@ -4,7 +4,10 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
-@SpringBootTest(classes = SpringJpaTestApplication.class , webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
+@SpringBootTest(
+        classes = SpringJpaTestApplication.class,
+        webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
+)
 @ActiveProfiles(value = {"production", "test"})
 class SpringJpaTestApplicationTests {
 

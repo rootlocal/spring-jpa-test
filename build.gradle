@@ -62,7 +62,7 @@ tasks.named('test') {
 // deploy
 cargo {
     containerId = 'tomcat9x'
-    port = "${cargo_port}".isBlank() ? 0 : "${cargo_port}" as Integer
+    port = "${cargo_port}" ? 8080 : "${cargo_port}" as Integer
 
     deployable {
         context = "${cargo_context}"
@@ -70,7 +70,7 @@ cargo {
 
     remote {
         hostname = "${cargo_hostname}"
-        port = "${cargo_port}".isBlank() ? 0 : "${cargo_port}" as Integer
+        port = "${cargo_port}" ? 8080 : "${cargo_port}" as Integer
         username = "${cargo_username}"
         password = "${cargo_password}"
     }
