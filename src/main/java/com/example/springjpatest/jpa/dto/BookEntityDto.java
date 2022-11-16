@@ -3,7 +3,6 @@ package com.example.springjpatest.jpa.dto;
 import com.example.springjpatest.jpa.entity.BookTypeEnum;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -15,7 +14,6 @@ import java.util.*;
 /**
  * A DTO for the {@link com.example.springjpatest.jpa.entity.BookEntity} entity
  */
-@Data
 @ToString
 public class BookEntityDto implements Serializable {
 
@@ -36,7 +34,7 @@ public class BookEntityDto implements Serializable {
     @JsonIgnore
     private BookTypeEnum type;
 
-    @JsonProperty("type")
+    @JsonIgnore
     private String BookType;
 
     @Getter
@@ -58,6 +56,7 @@ public class BookEntityDto implements Serializable {
         this.type = type;
     }
 
+    @JsonProperty("type")
     public String getBookType() {
         return type.getType();
     }

@@ -2,8 +2,8 @@ package com.example.springjpatest.web.controllers.rest;
 
 import com.example.springjpatest.jpa.dto.BookEntityDto;
 import com.example.springjpatest.jpa.services.BookService;
-import com.example.springjpatest.web.exception.BadRequestException;
-import com.example.springjpatest.web.exception.NotFoundException;
+import com.example.springjpatest.web.controllers.rest.exception.BadRequestRestException;
+import com.example.springjpatest.web.controllers.rest.exception.NotFoundRestException;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,28 +35,30 @@ public class BookController {
     }
 
     @GetMapping(value = "{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BookEntityDto> view(@PathVariable String id) throws NotFoundException, BadRequestException {
+    public ResponseEntity<BookEntityDto> view(@PathVariable String id)
+            throws NotFoundRestException, BadRequestRestException {
 
         try {
             Optional<BookEntityDto> optional = bookService.view(Long.decode(id));
-            return new ResponseEntity<>(optional.orElseThrow(NotFoundException::new), HttpStatus.OK);
+            return new ResponseEntity<>(optional.orElseThrow(NotFoundRestException::new), HttpStatus.OK);
         } catch (NumberFormatException e) {
             log.error("NumberFormatException: {}" + e.getMessage());
             StringBuilder builder = new StringBuilder();
             builder.append("NumberFormatException (Bad Request)\n");
             builder.append(String.format("id: %s type not Long", id));
-            throw new BadRequestException(builder.toString());
+            throw new BadRequestRestException(builder.toString());
         }
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<BookEntityDto> createBook(@RequestBody @NotNull @Valid BookEntityDto book, @NotNull HttpServletResponse response) throws BadRequestException {
+    public ResponseEntity<BookEntityDto> createBook(@RequestBody @NotNull @Valid BookEntityDto book, @NotNull HttpServletResponse response)
+            throws BadRequestRestException {
 
         try {
             return new ResponseEntity<>(bookService.add(book), HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
-            throw new BadRequestException(e.getMessage());
+            throw new BadRequestRestException(e.getMessage());
         }
     }
 

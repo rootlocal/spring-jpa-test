@@ -10,12 +10,12 @@ import org.springframework.boot.web.context.WebServerPortFileWriter;
 import org.springframework.context.ApplicationListener;
 
 @SpringBootApplication
-public class SpringJpaTestApplication {
+public class Application {
     private static final String[] profiles = new String[]{"dev", "production"};
 
     public static void main(String[] args) {
         new SpringApplicationBuilder()
-                .sources(SpringJpaTestApplication.class)
+                .sources(Application.class)
                 .listeners(applicationPidFileWriter(), webServerPortFileWriter())
                 .web(WebApplicationType.SERVLET)
                 .profiles(profiles)

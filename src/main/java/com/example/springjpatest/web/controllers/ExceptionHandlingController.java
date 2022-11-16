@@ -1,6 +1,7 @@
 package com.example.springjpatest.web.controllers;
 
 import com.example.springjpatest.web.exception.HttpException;
+import com.example.springjpatest.web.exception.HttpExceptionImpl;
 import com.example.springjpatest.web.exception.NotFoundException;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -48,9 +49,9 @@ public class ExceptionHandlingController implements WebMvcConfigurer {
         return "databaseError";
     }
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(HttpExceptionImpl.class)
     public ModelAndView handleError(@NotNull HttpServletRequest httpServletRequest,
-                                    @NotNull Exception e) {
+                                    @NotNull HttpExceptionImpl e) {
         log.error("handleError: {}", e.getMessage());
 
         String message = e.getMessage();

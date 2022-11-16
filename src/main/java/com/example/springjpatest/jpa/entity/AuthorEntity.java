@@ -1,6 +1,7 @@
 package com.example.springjpatest.jpa.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -26,6 +27,7 @@ public class AuthorEntity {
 
     @JsonIgnore
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToMany(mappedBy = "authors")
     private Collection<BookEntity> books = new ArrayList<>();
 

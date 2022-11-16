@@ -9,6 +9,6 @@ public class ServletInitializer extends SpringBootServletInitializer implements 
 
     @Override
     protected SpringApplicationBuilder configure(@NotNull SpringApplicationBuilder application) {
-        return application.sources(SpringJpaTestApplication.class);
+        return application.sources(Application.class);
     }
 }

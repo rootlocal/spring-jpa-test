@@ -1,6 +1,6 @@
 package com.example.springjpatest.rest;
 
-import com.example.springjpatest.SpringJpaTestApplication;
+import com.example.springjpatest.Application;
 import com.example.springjpatest.jpa.dto.BookEntityDto;
 import com.example.springjpatest.jpa.entity.BookTypeEnum;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest(
-        classes = SpringJpaTestApplication.class,
+        classes = Application.class,
         webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT
 )
 @AutoConfigureMockMvc

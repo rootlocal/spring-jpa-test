@@ -14,10 +14,9 @@ import java.util.*;
  * A DTO for the {@link com.example.springjpatest.jpa.entity.AuthorEntity} entity
  */
 @Data
-@ToString
-@Getter
-@Setter
 public class AuthorEntityDto implements Serializable {
+    private static final long serialVersionUID = -2125291097631942898L;
+
     @JsonProperty("authorId")
     private Long id;
     @JsonProperty("firstName")
